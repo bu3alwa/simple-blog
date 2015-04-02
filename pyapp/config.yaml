@@ -1,0 +1,6 @@
+- db-host: 127.0.0.1
+- db-port: 53
+- db-user: 'root'
+- db-pass: 'toor'
+- db-type: mysql
+- db-name: blog
