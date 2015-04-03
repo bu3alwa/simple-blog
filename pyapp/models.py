@@ -4,15 +4,17 @@ import sys
 from flask import Flask
 from passlib.hash import sha256_crypt
 from flask.ext.sqlalchemy import SQLAlchemy
-from . import db
+from pyapp import db
+
 
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True))
-    username = db.Column(db.Column(db.String(80)))
-    password = db.Column(db.Column(db.String(255)))
+    __tablename__ = "user"
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80))
+    password = db.Column(db.String(255))
 
-    def __init__(self, username, password)
-        self.username = username
+    def __init__(self, username, password):
+        self.username = username.strip()
         self.password = password
 
     def verify_pass(self, password):
@@ -23,15 +25,14 @@ class User(db.Model):
 
 
 class Post(db.Model):
+    __tablename__ = "post"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80))
     body = db.Column(db.Text)
 
-    def __init__(self, title, body)
+    def __init__(self, title, body):
         self.title = title
         self.body = body
     
     def __repr__(self):
-        return '<Post %r>' % self.title
-
-db.create_all()
+        return '<Post %r>' % self.body

@@ -23,10 +23,11 @@ SECRET_KEY = 'test'
 
 app = Flask(__name__)
 
+app.config['SECRET_KEY'] = "test"
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_TYPE + '://' + DB_USER + ":" + DB_PASS + '@' + DB_HOST + ':' + DB_PORT + '/' + DB_NAME
-DB = SQLAlchemy(app)
+db = SQLAlchemy(app)
 
-from modules import views
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=PORT, debug=True)
+from pyapp import models, views
+db.create_all()
 
+app.debug = True
