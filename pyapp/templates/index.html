@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block body %}
+{% block content %}
     <ul class=entries>
     {% for entry in posts %}
         <li><h2>{{ entry.title }}</h2>{{ entry.text|safe }}i</li>
