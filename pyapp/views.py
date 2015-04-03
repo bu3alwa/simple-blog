@@ -24,8 +24,8 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        user_name = request.args.get('user').strip()
-        password = request.args.get('pass')
+        user_name = request.args.get('username')
+        password = request.args.get('password')
         try:
             user = User.query.filter_by(username=user_name).first()
             if user.verify_pass(password):
@@ -33,12 +33,23 @@ def login():
             else:
                 return render_template("login.html")
         except:
-            return "login error"
+            return render_template("login.html", error='login error')
         
     elif request.method == 'GET':
          return render_template("login.html")
 
-@app.route('/create-user')
-def create_user():
-    return render_template("create_user")
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'GET':
+         return render_template("register.html")
 
+    if request.method == 'POST':
+        username = request.args.get('username')
+        password = request.args.get('password')
+        try:
+            newuser = User(username, password)
+            db.session.add(newuser)
+            db.session.commit()
+        except:
+            return render_template("register.html", error='registration failed')
+            

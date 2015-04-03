@@ -5,7 +5,7 @@ import sys
 import yaml
 import argparse
 
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(prog='pyapp')
 parser.add_argument("-c", "--config", help="path to config file", type=str, required=True)
 args = parser.parse_args()
 
@@ -23,7 +23,7 @@ SECRET_KEY = 'test'
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = "test"
+app.config['SECRET_KEY'] = SECRET_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_TYPE + '://' + DB_USER + ":" + DB_PASS + '@' + DB_HOST + ':' + DB_PORT + '/' + DB_NAME
 db = SQLAlchemy(app)
 

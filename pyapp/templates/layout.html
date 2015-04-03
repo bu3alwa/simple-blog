@@ -10,6 +10,7 @@
 <ul>
   <li><a href="/">Home</a></li>
   <li><a href="post">Add Post</a></li>
+  <li><a href="register">Register</a></li>
   <li>
       {% if not session.logged_in %}
          <a href="{{ url_for('login') }}">log in</a>
