@@ -27,10 +27,10 @@ def login():
                 user = User.query.filter_by(username=user_name).first()
                 if user.verify_pass(password):
                     session['logged_in'] = True
-                    session['user'] = user[0]
+                    session['user'] = user.username[0]
                     return redirect("/")
             else:
-                redirect("/")
+                return redirect("/")
         except:
             return render_template("login.html", error='login error')
         
@@ -43,7 +43,8 @@ def login():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'GET':
-         return render_template("register.html")
+        if not session.get("logged_in"):
+         return render_template("register.html", user=session.get('user'))
 
     if request.method == 'POST':
         username = request.form.get('username')
@@ -75,6 +76,11 @@ def addpost():
 
     if request.method == 'POST':
         try:
+            title = request.form.get('title')
+            body = request.form.get('content')
+            newpost = Post(title, body)
+            db.session.add(newpost)
+            db.session.commit()
             return redirect("/")
         except:
             return render_template("add-post.html", error="error posting")
@@ -83,6 +89,7 @@ def addpost():
 def logout():
     if session.get('logged_in'):
         session.pop('user', None)
+        session.pop('logged_in', None)
         return redirect('/')
     else:
         flash("You are not logged in")

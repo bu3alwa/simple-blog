@@ -15,7 +15,7 @@ class User(db.Model):
 
     def __init__(self, username, password):
         self.username = username.strip()
-        self.password = password
+        self.password = sha256_crypt.encrypt(password)
 
     def verify_pass(self, password):
         return sha256_crypt.verify(password, self.password)
