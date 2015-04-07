@@ -1,42 +1,44 @@
 import sys
 import os
 
-from flask import render_template, request, session, redirect, session, Blueprint, abort
+from flask import render_template, request, session, redirect, session, Blueprint, abort, flash
 from pyapp import app
 from models import *
 from pyapp import db
 from jinja2 import TemplateNotFound
 
-SESSION_AGE = 600
-INVALID_SESSION = ("Your session expired, pleade log in again", 403)
-
-page = Blueprint('page', __name__, template_folder='templates')
-app.register_blueprint(page)
-
-def forbidden():
-    return("Access denied", 403)
-
 @app.route('/', methods=['GET'])
 def index():
-    posts = User.query.order_by(User.id).all()
-    return render_template("index.html", posts=posts)
+    posts = Post.query.order_by(Post.id).all()
+
+    if not session.get('logged_in'):
+        return render_template("index.html", posts=posts)
+    else:
+        user = session.get('user')
+        return render_template("index.html", posts=posts, username=user)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        user_name = request.args.get('username')
-        password = request.args.get('password')
+        user_name = request.form.get('username')
+        password = request.form.get('password')
         try:
-            user = User.query.filter_by(username=user_name).first()
-            if user.verify_pass(password):
-                return "logged in"
+            if not session.get('logged_in'):
+                user = User.query.filter_by(username=user_name).first()
+                if user.verify_pass(password):
+                    session['logged_in'] = True
+                    session['user'] = user[0]
+                    return redirect("/")
             else:
-                return render_template("login.html")
+                redirect("/")
         except:
             return render_template("login.html", error='login error')
         
     elif request.method == 'GET':
-         return render_template("login.html")
+        if session.get("loggged_in"):
+            redirect('/')
+        else:
+            return render_template("login.html")
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -44,12 +46,44 @@ def register():
          return render_template("register.html")
 
     if request.method == 'POST':
-        username = request.args.get('username')
-        password = request.args.get('password')
+        username = request.form.get('username')
+        password = request.form.get('password')
+        user = User.query.filter_by(username=username).first()
+        
         try:
-            newuser = User(username, password)
-            db.session.add(newuser)
-            db.session.commit()
+            if user.username == username:
+                return render_template("register.html", error="User already exists")
+
         except:
-            return render_template("register.html", error='registration failed')
-            
+            try:
+                 newuser = User(username, password)
+                 db.session.add(newuser)
+                 db.session.commit()
+                 return redirect('/')
+            except:
+                return render_template("register.html", error="Register error")
+                
+@app.route('/add-post', methods=['GET', 'POST'])
+def addpost():
+    if request.method == 'GET':
+        if not session.get('logged_in'):
+            flash("Please login first")
+            return redirect("/login")
+        else:
+            user = session.get("user")
+            return render_template("add-post.html", username=user)
+
+    if request.method == 'POST':
+        try:
+            return redirect("/")
+        except:
+            return render_template("add-post.html", error="error posting")
+
+@app.route('/logout', methods=['GET'])
+def logout():
+    if session.get('logged_in'):
+        session.pop('user', None)
+        return redirect('/')
+    else:
+        flash("You are not logged in")
+        return redirect('/')

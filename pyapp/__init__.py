@@ -19,7 +19,7 @@ DB_PORT = conf['db-port']
 DB_TYPE = conf['db-type']
 DB_NAME = conf['db-name']
 PORT = conf['port']
-SECRET_KEY = 'test'
+SECRET_KEY = conf['secret-key']
 
 app = Flask(__name__)
 

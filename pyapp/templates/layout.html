@@ -8,13 +8,14 @@
 <section>
 <h1>Menu</h1>
 <ul>
+    {% if username %}<li><a>Hi, {{ user }}</a></li>{% endif %}
   <li><a href="/">Home</a></li>
-  <li><a href="post">Add Post</a></li>
+  <li><a href="add-post">Add Post</a></li>
   <li><a href="register">Register</a></li>
   <li>
       {% if not session.logged_in %}
          <a href="{{ url_for('login') }}">log in</a>
-      {% else %} b     <a href="{{ url_for('logout') }}">log out</a>
+      {% else %}<a href="{{ url_for('logout') }}">log out</a>
       {% endif %}
   </li>
 </ul>
