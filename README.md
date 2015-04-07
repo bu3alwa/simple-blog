@@ -1,5 +1,5 @@
 Simple blog webapp designed to run with two different languages (python, ruby).
-This webapp is in no way meant to be secure. It is just a protype and a proof of concept.
+This webapp is just a protype and a proof of concept it is not meant for production environmnet.
 
 <h3>Python webapp Dependencies:</h3>
 <ul>
