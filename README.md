@@ -15,7 +15,7 @@ Make sure you setup a mysql database and to update the config.yaml.
 To run the webapp you can use a process control system or run the python app manually:
 `# python pyapp -c /path/to/config.yaml`
 
-<h3>Ruby on rails</h3>
+<h3>Laravel webapp(under development)</h3>
 <ul>
-<li>under development</li>
+<li>requires php5.4 and above</li>
 </ul>

@@ -4,5 +4,5 @@ db-user: 'root'
 db-pass: 'toor'
 db-type: 'mysql'
 db-name: 'blog'
-port: 6000
+port: 80
 secret-key: 'shouldbearandomkey'
