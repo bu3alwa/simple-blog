@@ -5,4 +5,4 @@ db-pass: 'toor'
 db-type: 'mysql'
 db-name: 'blog'
 port: 80
-secret-key: 'shouldbearandomkey'
+secret-key: '9w5c4cmW3dHhfDIy'

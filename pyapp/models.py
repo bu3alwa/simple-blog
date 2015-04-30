@@ -5,7 +5,7 @@ import datetime
 from flask import Flask
 from passlib.hash import sha256_crypt
 from flask.ext.sqlalchemy import SQLAlchemy
-from pyapp import db
+from pyapp import db, SECRET_KEY
 
 class User(db.Model):
     __tablename__ = "user"
@@ -18,14 +18,14 @@ class User(db.Model):
 
     def __init__(self, username, password, remember=False):
         self.username = username.strip()
-        self.password = sha256_crypt.encrypt(password)
+        self.password = sha256_crypt.encrypt(password, salt=SECRET_KEY, rounds=110000)
 	self.remember_token = remember
 	self.created_at = False
 	self.updated_at = False
 
     def verify_pass(self, password):
         return sha256_crypt.verify(password, self.password)
-    
+
     def __repr__(self):
         return '<User %r>' % self.username
 
@@ -39,6 +39,6 @@ class Post(db.Model):
     def __init__(self, title, body):
         self.title = title
         self.body = body
-    
+
     def __repr__(self):
         return '<Post %r>' % self.body

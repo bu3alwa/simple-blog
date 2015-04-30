@@ -1,5 +1,8 @@
 <?php
 
+use App\User;
+use App\Post;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -74,12 +77,16 @@ Route::post('register', function()
   if($user == '' or $pass == '')
     return View::make('register')->with('error', 'Please enter a username or password');
 
-  $q = User::where('username', '=', $user)->get();
+  $validator = Validator::make(array('username' => $user), array('username' => ['required', 'min:5']));
 
-  if($q == $user)
+  if($validator->fails())
     return View::make('register')->with('error', 'Username already exists');
 
-  $model = User::create(array('username' => $user, 'password' => $pass));
+  $newuser = new User;
+  $newuser->username = $user;
+  $newuser->password = crypt($pass, '$5$rounds=110000$' . $_ENV['APP_KEY']);
+
+  $newuser->save();
   return redirect('/');
 });
 
