@@ -9,7 +9,6 @@ setup(
         install_requires=[
             'passlib', 
             'python-daemon', 
-            'MySQL-python', 
             'tornado', 
             'pyyaml', 
             'flask', 
